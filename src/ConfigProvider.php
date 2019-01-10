@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace Phly\Swoole\TaskWorker;
 
+use Psr\EventDispatcher\ListenerProviderInterface;
+use Swoole\Http\Server as HttpServer;
+
 class ConfigProvider
 {
     public function __invoke() : array
@@ -21,6 +24,17 @@ class ConfigProvider
     public function getDependencies() : array
     {
         return [
+            'delegators' => [
+                HttpServer::class => [
+                    TaskWorkerDelegator::class,
+                ],
+                ListenerProviderInterface::class => [
+                    QueueableListenerProviderDelegator::class,
+                ],
+            ],
+            'factories' => [
+                TaskWorker::class => TaskWorkerFactory::class,
+            ],
         ];
     }
 }

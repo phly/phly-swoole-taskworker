@@ -13,7 +13,9 @@
         "rss": "https://github.com/phly/phly-swoole-taskworker/releases.atom"
     },
     "require": {
-        "php": "^7.2"
+        "php": "^7.2",
+        "ext-swoole": "*",
+        "psr/log-implementation": "^1.0"
     },
     "require-dev": {
         "phly/phly-event-dispatcher": "^0.2.1 || ^1.0",
