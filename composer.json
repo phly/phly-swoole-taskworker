@@ -1,27 +1,27 @@
 {
     "name": "phly/phly-swoole-taskworker",
-    "description": "<package description; should match repository description>",
+    "description": "Provides a Task Worker implementation for use with Swoole",
     "license": "BSD-3-Clause",
     "keywords": [
-        "components",
-        "zf",
-        "zendframework",
-        "<individual keywords for current package>"
+        "phly",
+        "swoole",
+        "psr-14"
     ],
     "support": {
-        "docs": "https://docs.zendframework.com/phly-swoole-taskworker/",
         "issues": "https://github.com/phly/phly-swoole-taskworker/issues",
         "source": "https://github.com/phly/phly-swoole-taskworker",
-        "rss": "https://github.com/phly/phly-swoole-taskworker/releases.atom",
-        "chat": "https://zendframework-slack.herokuapp.com",
-        "forum": "https://discourse.zendframework.com/c/questions/components"
+        "rss": "https://github.com/phly/phly-swoole-taskworker/releases.atom"
     },
     "require": {
-        "php": "^7.1"
+        "php": "^7.2"
     },
     "require-dev": {
+        "phly/phly-event-dispatcher": "^0.2.1 || ^1.0",
         "phpunit/phpunit": "^7.1.1",
         "zendframework/zend-coding-standard": "~1.0.0"
+    },
+    "suggest": {
+        "phly/phly-event-dispatcher": "To allow queueing listeners and events dispatched by your PSR-14 event dispatcher"
     },
     "autoload": {
         "psr-4": {
