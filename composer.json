@@ -1,0 +1,57 @@
+{
+    "name": "phly/phly-swoole-taskworker",
+    "description": "<package description; should match repository description>",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "components",
+        "zf",
+        "zendframework",
+        "<individual keywords for current package>"
+    ],
+    "support": {
+        "docs": "https://docs.zendframework.com/phly-swoole-taskworker/",
+        "issues": "https://github.com/phly/phly-swoole-taskworker/issues",
+        "source": "https://github.com/phly/phly-swoole-taskworker",
+        "rss": "https://github.com/phly/phly-swoole-taskworker/releases.atom",
+        "chat": "https://zendframework-slack.herokuapp.com",
+        "forum": "https://discourse.zendframework.com/c/questions/components"
+    },
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.1.1",
+        "zendframework/zend-coding-standard": "~1.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phly\\Swoole\\TaskWorker\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhlyTest\\Swoole\\TaskWorker\\": "test/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "zf": {
+            "config-provider": "Phly\\Swoole\\TaskWorker\\ConfigProvider"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    }
+}
