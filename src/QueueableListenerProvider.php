@@ -32,11 +32,11 @@ class QueueableListenerProvider implements ListenerProviderInterface
      * If any given listener implements ListenerShouldQueue, this method will
      * decorate the listener in a QueuableListener instance before yielding it.
      */
-    public function getListenerForEvent(object $event) : iterable
+    public function getListenersForEvent(object $event) : iterable
     {
-        foreach ($this->provider->getListenerForEvent($event) as $listener) {
+        foreach ($this->provider->getListenersForEvent($event) as $listener) {
             yield $listener instanceof ListenerShouldQueue
-                ? new QueuableListener($this->server, $listener)
+                ? new QueueableListener($this->server, $listener)
                 : $listener;
         }
     }
