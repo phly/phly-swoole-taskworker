@@ -33,6 +33,12 @@ final class Task
         $this->payload = $payload;
     }
 
+    public function __invoke()
+    {
+        $handler = $this->handler;
+        $handler(...$this->payload);
+    }
+
     public function handler() : callable
     {
         return $this->handler;

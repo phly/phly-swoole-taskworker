@@ -44,7 +44,7 @@ class TaskWorker
         );
 
         try {
-            $handler(...$payload);
+            $task();
         } catch (Throwable $e) {
             $this->logNotifierException($e, $taskId);
         } finally {
