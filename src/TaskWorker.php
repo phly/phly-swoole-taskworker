@@ -24,22 +24,18 @@ class TaskWorker
 
     public function __invoke(HttpServer $server, int $taskId, int $fromId, $task) : void
     {
-        if (! $task instanceof Task) {
+        if (! $task instanceof TaskInterface) {
             $this->logger->error('Invalid task provided to task worker: {type}', [
                 'type' => is_object($task) ? get_class($task) : gettype($task)
             ]);
             return;
         }
 
-        $handler = $task->handler();
-        $payload = $task->payload();
-
         $this->logger->notice(
-            'Starting work on task {taskId} using handler of type {handlerType} and payload: {payload}',
+            'Starting work on task {taskId} using: {task}',
             [
-                'taskId'      => $taskId,
-                'handlerType' => is_object($handler) ? get_class($handler) : gettype($handler),
-                'payload'     => json_encode($payload),
+                'taskId' => $taskId,
+                'task'   => json_encode($task),
             ]
         );
 

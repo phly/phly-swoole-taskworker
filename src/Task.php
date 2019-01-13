@@ -15,7 +15,7 @@ namespace Phly\Swoole\TaskWorker;
  * with which to call it. Handlers are expected to return void; any return
  * values will be ignored.
  */
-final class Task
+final class Task implements TaskInterface
 {
     /**
      * @var callable
@@ -33,19 +33,34 @@ final class Task
         $this->payload = $payload;
     }
 
-    public function __invoke()
+    public function __invoke() : void
     {
-        $handler = $this->handler;
-        $handler(...$this->payload);
+        ($this->handler)(...$this->payload);
     }
 
-    public function handler() : callable
+    public function jsonSerialize()
     {
-        return $this->handler;
+        return [
+            'handler'   => $this->serializeHandler($this->handler),
+            'arguments' => $this->payload,
+        ];
     }
 
-    public function payload() : array
+    private function serializeHandler($handler) : string
     {
-        return $this->payload;
+        if (is_object($handler)) {
+            return get_class($handler);
+        }
+
+        if (is_string($handler)) {
+            return $handler;
+        }
+
+        if (! is_array($handler)) {
+            return '<unknown>';
+        }
+
+        [$classOrObject, $method] = explode($handler, 2);
+        return sprintf('%s::%s', $this->serializeHandler($classOrObject), $method);
     }
 }
