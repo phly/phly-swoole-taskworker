@@ -28,9 +28,6 @@ class ConfigProvider
                 HttpServer::class => [
                     TaskWorkerDelegator::class,
                 ],
-                ListenerProviderInterface::class => [
-                    QueueableListenerProviderDelegator::class,
-                ],
             ],
             'factories' => [
                 TaskWorker::class => TaskWorkerFactory::class,

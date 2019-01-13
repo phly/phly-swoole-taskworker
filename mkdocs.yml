@@ -3,7 +3,9 @@ site_dir: docs/html
 pages:
     - index.md
     - Introduction: intro.md
-site_name: Component Name Goes Here
-site_description: 'Component Description goes here'
+    - "Tasks and the TaskWorker": tasks.md
+    - "Queued Listeners": queued-listeners.md
+site_name: 'phly/phly-swoole-taskworker'
+site_description: 'TaskWorker implementation for Swoole tasks'
 repo_url: 'https://github.com/phly/phly-swoole-taskworker'
-copyright: 'Copyright (c) 2019 <a href="https://www.zend.com/">Zend Technologies USA Inc.</a>'
+copyright: 'Copyright (c) <a href="https://mwop.net">Matthew Weier O\'Phinney</a>'
