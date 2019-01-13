@@ -37,6 +37,6 @@ final class QueueableListener
 
     public function __invoke(object $event) : void
     {
-        $this->server->task(new Task($event, $this->listener));
+        $this->server->task(new Task($this->listener, $event));
     }
 }

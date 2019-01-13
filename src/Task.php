@@ -8,31 +8,38 @@ declare(strict_types=1);
 
 namespace Phly\Swoole\TaskWorker;
 
+/**
+ * Representation of a task to execute via task worker.
+ *
+ * Contains the callable that will handle the task, and an array of arguments
+ * with which to call it. Handlers are expected to return void; any return
+ * values will be ignored.
+ */
 final class Task
 {
     /**
-     * @var object
-     */
-    private $event;
-
-    /**
      * @var callable
      */
-    private $listener;
+    private $handler;
 
-    public function __construct(object $event, callable $listener)
+    /**
+     * @var array
+     */
+    private $payload;
+
+    public function __construct(callable $handler, ...$payload)
     {
-        $this->event    = $event;
-        $this->listener = $listener;
+        $this->handler = $handler;
+        $this->payload = $payload;
     }
 
-    public function event() : object
+    public function handler() : callable
     {
-        return $this->event;
+        return $this->handler;
     }
 
-    public function listener() : callable
+    public function payload() : array
     {
-        return $this->listener;
+        return $this->payload;
     }
 }

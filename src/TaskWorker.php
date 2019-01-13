@@ -31,16 +31,20 @@ class TaskWorker
             return;
         }
 
-        $event    = $task->event();
-        $listener = $task->listener();
+        $handler = $task->handler();
+        $payload = $task->payload();
 
-        $this->logger->notice('Starting work on task {taskId} using event: {event}', [
-            'taskId' => $taskId,
-            'event'  => json_encode($event),
-        ]);
+        $this->logger->notice(
+            'Starting work on task {taskId} using handler of type {handlerType} and payload: {payload}',
+            [
+                'taskId'      => $taskId,
+                'handlerType' => is_object($handler) ? get_class($handler) : gettype($handler),
+                'payload'     => json_encode($payload),
+            ]
+        );
 
         try {
-            $listener($event);
+            $handler(...$payload);
         } catch (Throwable $e) {
             $this->logNotifierException($e, $taskId);
         } finally {
