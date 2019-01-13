@@ -15,7 +15,7 @@
     "require": {
         "php": "^7.2",
         "ext-swoole": "*",
-        "psr/log-implementation": "^1.0"
+        "psr/log": "^1.0"
     },
     "require-dev": {
         "phly/phly-event-dispatcher": "^0.2.1 || ^1.0",
@@ -23,7 +23,8 @@
         "zendframework/zend-coding-standard": "~1.0.0"
     },
     "suggest": {
-        "phly/phly-event-dispatcher": "To allow queueing listeners and events dispatched by your PSR-14 event dispatcher"
+        "phly/phly-event-dispatcher": "To allow queueing listeners and events dispatched by your PSR-14 event dispatcher",
+        "psr/log-implementation": "A logger implementation is required for the task worker"
     },
     "autoload": {
         "psr-4": {

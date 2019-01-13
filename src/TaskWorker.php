@@ -28,6 +28,7 @@ class TaskWorker
             $this->logger->error('Invalid task provided to task worker: {type}', [
                 'type' => is_object($task) ? get_class($task) : gettype($task)
             ]);
+            $server->finish('');
             return;
         }
 
