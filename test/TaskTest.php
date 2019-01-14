@@ -50,4 +50,52 @@ class TaskTest extends TestCase
 
         $this->assertSame($expected, $this->task->jsonSerialize());
     }
+
+    public function testTaskCanSerializeStringHandlerName()
+    {
+        $task = new Task('str_replace', 'foo', 'bar', 'foobar');
+        $expected = [
+            'handler'   => 'str_replace',
+            'arguments' => [
+                'foo',
+                'bar',
+                'foobar',
+            ],
+        ];
+
+        $this->assertSame($expected, $task->jsonSerialize());
+    }
+
+    public function testTaskCanSerializeStaticMethodNotation()
+    {
+        $task = new Task(TestCase::class . '::fail');
+        $expected = [
+            'handler'   => TestCase::class . '::fail',
+            'arguments' => [],
+        ];
+
+        $this->assertSame($expected, $task->jsonSerialize());
+    }
+
+    public function testTaskCanSerializeInstanceMethod()
+    {
+        $task = new Task([$this, 'setUp']);
+        $expected = [
+            'handler'   => __CLASS__ . '::setUp',
+            'arguments' => [],
+        ];
+
+        $this->assertSame($expected, $task->jsonSerialize());
+    }
+
+    public function testTaskCanSerializeStaticMethodViaArrayNotation()
+    {
+        $task = new Task([__CLASS__, 'fail']);
+        $expected = [
+            'handler'   => __CLASS__ . '::fail',
+            'arguments' => [],
+        ];
+
+        $this->assertSame($expected, $task->jsonSerialize());
+    }
 }

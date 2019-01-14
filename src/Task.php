@@ -60,7 +60,8 @@ final class Task implements TaskInterface
             return '<unknown>';
         }
 
-        [$classOrObject, $method] = explode($handler, 2);
+        $classOrObject = array_shift($handler);
+        $method        = array_shift($handler);
         return sprintf('%s::%s', $this->serializeHandler($classOrObject), $method);
     }
 }
