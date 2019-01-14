@@ -3,7 +3,8 @@
 [![Build Status](https://secure.travis-ci.org/phly/phly-swoole-taskworker.svg?branch=master)](https://secure.travis-ci.org/phly/phly-swoole-taskworker)
 [![Coverage Status](https://coveralls.io/repos/github/phly/phly-swoole-taskworker/badge.svg?branch=master)](https://coveralls.io/github/phly/phly-swoole-taskworker?branch=master)
 
-This library provides ...
+This library provides a simple task worker implementation for use with Swoole
+server instances.
 
 ## Installation
 

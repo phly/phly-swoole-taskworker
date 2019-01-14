@@ -18,7 +18,6 @@
         "psr/log": "^1.0"
     },
     "require-dev": {
-        "phly/phly-event-dispatcher": "^0.2.1 || ^1.0",
         "phpunit/phpunit": "^7.1.1",
         "psr/container": "^1.0",
         "zendframework/zend-coding-standard": "~1.0.0"
@@ -27,7 +26,6 @@
         "phpspec/prophecy": "<1.7.5"
     },
     "suggest": {
-        "phly/phly-event-dispatcher": "To allow queueing listeners and events dispatched by your PSR-14 event dispatcher",
         "psr/log-implementation": "A logger implementation is required for the task worker"
     },
     "autoload": {

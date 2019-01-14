@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Phly\Swoole\TaskWorker;
 
-use Psr\EventDispatcher\ListenerProviderInterface;
 use Swoole\Http\Server as HttpServer;
 
 class ConfigProvider
