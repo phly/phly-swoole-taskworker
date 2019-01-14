@@ -1,4 +1,4 @@
-Copyright (c) 2019, Zend Technologies USA, Inc.
+Copyright (c) 2019, Matthew Weier O'Phinney
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
