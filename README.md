@@ -15,10 +15,8 @@ $ composer require phly/phly-swoole-taskworker
 
 ## Documentation
 
-Browse the documentation online at https://docs.zendframework.com/phly-swoole-taskworker/
+Browse the documentation in the [docs tree](docs/book/).
 
 ## Support
 
 * [Issues](https://github.com/zendframework/phly-swoole-taskworker/issues/)
-* [Chat](https://zendframework-slack.herokuapp.com/)
-* [Forum](https://discourse.zendframework.com/)
