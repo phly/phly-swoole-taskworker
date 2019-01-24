@@ -2,6 +2,8 @@
 
 > Formerly "Queued Listeners".
 
+- Since 1.1.0
+
 When using a [PSR-14](https://github.com/php-fig/fig-standards/blob/bb8df27dba53fa5cbc653d1d446f850e5690f3cc/proposed/event-dispatcher.md)
 event dispatcher, you may want to defer the work of a listener instead of
 handling it immediately. As an example, if you have a listener that might be
@@ -31,4 +33,34 @@ $listener = new DeferredListener(
 
 // Assuming a provider with an "attach()" method:
 $provider->attach(SomeEvent::class, $listener);
+```
+
+## DeferredListenerDelegator
+
+To help automate deferment, you can use [delegator factories](https://docs.zendframework.com/zend-expressive/v3/features/container/delegator-factories/).
+This package provides a delegator via the class
+`Phly\Swoole\TaskWorker\DeferredListenerDelegator`.
+
+In typical usage, you will assign this to individual listener services within
+your `config/autoload/local.php` file in production, so that deferment only
+happens in production.
+
+As an example:
+
+```php
+// in config/autoload/local.php
+use Phly\Swoole\TaskWorker\DeferredListenerDelegator;
+
+return [
+    'dependencies' => [
+        'factories' => [
+            App\SomeEventListener::class => App\SomeEventListenerFactory::class
+        ],
+        'delegators' => [
+            App\SomeEventListener::class => [
+                DeferredListenerDelegator::class,
+            ],
+        ],
+    ],
+];
 ```
