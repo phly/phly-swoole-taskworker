@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#1](https://github.com/phly/phly-swoole-taskworker/pull/1) adds the class `DeferredListener`; it operates identically to `QueuedListener`,
+  and replaces its functionality, albeit with a more accurate name.
+
 - All functionality.
 
 ### Changed
@@ -14,7 +17,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Deprecated
 
-- Nothing.
+- [#1](https://github.com/phly/phly-swoole-taskworker/pull/1) deprecates the `QueueableListener` class in favor of the new
+  `DeferredListener` class.
 
 ### Removed
 
