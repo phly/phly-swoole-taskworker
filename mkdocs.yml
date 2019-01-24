@@ -4,7 +4,8 @@ pages:
     - index.md
     - Introduction: intro.md
     - "Tasks and the TaskWorker": tasks.md
-    - "Queued Listeners": queued-listeners.md
+    - "Deferred Listeners": deferred-listeners.md
+    - "_queued-listeners": queued-listeners.md
 site_name: 'phly/phly-swoole-taskworker'
 site_description: 'TaskWorker implementation for Swoole tasks'
 repo_url: 'https://github.com/phly/phly-swoole-taskworker'

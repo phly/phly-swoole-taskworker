@@ -11,15 +11,13 @@ namespace Phly\Swoole\TaskWorker;
 use Swoole\Http\Server as HttpServer;
 
 /**
- * Decorator for an event listener that queues it as a Swoole task.
+ * Decorator for an event listener that defers it to run as a Swoole task.
  *
  * When invoked, this listener will create a Task instance with the
  * provided event and the decorated listener, and pass it to the composed
  * HTTP server's task method.
- *
- * @deprecated since 1.1.0; use Phly\Swoole\TaskWorker\DeferredListener instead.
  */
-final class QueueableListener
+final class DeferredListener
 {
     /**
      * @var HttpServer
