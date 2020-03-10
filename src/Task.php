@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Phly\Swoole\TaskWorker;
 
+use Psr\Container\ContainerInterface;
+
 /**
  * Representation of a task to execute via task worker.
  *
@@ -33,7 +35,7 @@ final class Task implements TaskInterface
         $this->payload = $payload;
     }
 
-    public function __invoke() : void
+    public function __invoke(ContainerInterface $container) : void
     {
         ($this->handler)(...$this->payload);
     }

@@ -6,7 +6,7 @@ This component provides a task worker implementation for
 The task runner expects `Phly\Swoole\TaskWorker\TaskInterface` instances as the
 payload to process. `TaskInterface` instances must:
 
-- Define `__invoke()`, which should not return any values.
+- Define `__invoke(\Psr\Container\ContainerInterface) :void`.
 - Implement `JsonSerializable`'s `jsonSerialize()` method (`TaskInterface`
   extends this interface). This latter is used by the task worker to log the
   task being handled.

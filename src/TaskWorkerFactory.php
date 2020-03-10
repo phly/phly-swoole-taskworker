@@ -16,6 +16,7 @@ class TaskWorkerFactory
     public function __invoke(ContainerInterface $container) : TaskWorker
     {
         return new TaskWorker(
+            $container,
             $container->get(LoggerInterface::class)
         );
     }

@@ -11,12 +11,14 @@ namespace PhlyTest\Swoole\TaskWorker;
 use Closure;
 use Phly\Swoole\TaskWorker\Task;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class TaskTest extends TestCase
 {
     public function setUp()
     {
-        $this->result = (object) ['payload' => null];
+        $this->container = $this->prophesize(ContainerInterface::class)->reveal();
+        $this->result    = (object) ['payload' => null];
 
         $this->handler = function ($a, $b) {
             $this->result->payload = [
@@ -30,7 +32,7 @@ class TaskTest extends TestCase
 
     public function testTaskIsInvokable()
     {
-        ($this->task)();
+        ($this->task)($this->container);
 
         $this->assertSame([
             'a' => 'first',

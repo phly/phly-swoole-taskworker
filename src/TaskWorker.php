@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Phly\Swoole\TaskWorker;
 
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Swoole\Http\Server as HttpServer;
 use Throwable;
@@ -17,9 +18,10 @@ class TaskWorker
     /** @var LoggerInterface */
     private $logger;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(ContainerInterface $container, LoggerInterface $logger)
     {
-        $this->logger = $logger;
+        $this->container = $container;
+        $this->logger    = $logger;
     }
 
     public function __invoke(HttpServer $server, int $taskId, int $fromId, $task) : void
@@ -41,7 +43,7 @@ class TaskWorker
         );
 
         try {
-            $task();
+            $task($this->container);
         } catch (Throwable $e) {
             $this->logNotifierException($e, $taskId);
         } finally {

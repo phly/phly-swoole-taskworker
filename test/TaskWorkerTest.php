@@ -13,18 +13,19 @@ use Phly\Swoole\TaskWorker\TaskWorker;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Swoole\Http\Server as HttpServer;
-use Throwable;
 
 class TaskWorkerTest extends TestCase
 {
     public function setUp()
     {
-        $this->server = $this->createMock(HttpServer::class);
-        $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->taskWorker = new TaskWorker($this->logger->reveal());
+        $this->container  = $this->prophesize(ContainerInterface::class);
+        $this->server     = $this->createMock(HttpServer::class);
+        $this->logger     = $this->prophesize(LoggerInterface::class);
+        $this->taskWorker = new TaskWorker($this->container->reveal(), $this->logger->reveal());
     }
 
     public function testLogsErrorWhenTaskIsNotATask()
@@ -64,7 +65,7 @@ class TaskWorkerTest extends TestCase
         $spy = (object) ['triggered' => false];
         $task = $this->prophesize(TaskInterface::class);
         $task->
-            __invoke()
+            __invoke($this->container->reveal())
             ->will(function () use ($spy) {
                 $spy->triggered = true;
             });
@@ -102,7 +103,7 @@ class TaskWorkerTest extends TestCase
 
         $task = $this->prophesize(TaskInterface::class);
         $task->
-            __invoke()
+            __invoke($this->container->reveal())
             ->will(function () use ($throwable) {
                 throw $throwable;
             });

@@ -16,13 +16,14 @@ Tasks are any object implementing `Phly\Swoole\TaskWorker\TaskInterface`:
 namespace Phly\Swoole\TaskWorker;
 
 use JsonSerializable;
+use Psr\Container\ContainerInterface;
 
 interface TaskInterface extends JsonSerializable
 {
     /**
      * Tasks are invokable; implement this method to do the work of the task.
      */
-    public function __invoke() : void;
+    public function __invoke(ContainerInterface $container) : void;
 }
 ```
 
@@ -30,6 +31,12 @@ Note that tasks must implement `JsonSerializable` as well. This is done so that
 the task worker can provide details on the task being dispatched. The
 information you return from that method can be anything you need in order to
 help you identify task types or payloads in your logs.
+
+> ### Container argument
+>
+> The `$container` argument was added in version 2.0. If you were creating
+> custom task types previously, you will need to update your implementations to
+> accept the argument.
 
 ### The Task class
 
@@ -68,6 +75,39 @@ The handler will be serialized as follows:
   `ClassName::methodName`.
 
 The `Task` class is a good, general-purpose choice for task implementations.
+
+> ### Serializable handlers
+>
+> Handlers provided to a `Task` instance MUST be serializable. If they compose
+> any other dependencies, and if any of those are non-serializable, you will
+> receive a "Serialization of 'Closure' is not allowed" error. In such scenarios,
+> you should use the `ServiceBasedTask`, detailed next.
+
+### The ServiceBasedTask class
+
+- Since 2.0.0
+
+Another implementation of `TaskInterface` is provided via
+`Phly\Swoole\TaskWorker\ServiceBasedTask`. This class has the following
+constructor:
+
+```php
+namespace Phly\Swoole\TaskWorker;
+
+final class ServiceBasedTask implements TaskInterface
+{
+    public function __construct(string $serviceName, ...$payload);
+}
+```
+
+When you invoke a `TaskInterface`, it receives a PSR-11 container instance. As
+such, this task implementation will pass the `$serviceName` to the container to
+retrieve it. If the service resolves to a `DeferredServiceListener` instance, it
+will additionally pull the listener from that instance, and then invoke it
+with the `$payload` provided. This approach allows you to use the same services
+from your container when processing tasks as you use in your primary application
+code, including any dependencies (such as an HTTP client, database adapter,
+etc.).
 
 ## The TaskWorker
 
