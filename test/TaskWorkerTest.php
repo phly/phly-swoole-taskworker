@@ -1,8 +1,4 @@
 <?php
-/**
- * @license http://opensource.org/licenses/BSD-2-Clause BSD-2-Clause
- * @copyright Copyright (c) Matthew Weier O'Phinney
- */
 
 declare(strict_types=1);
 
@@ -13,6 +9,7 @@ use Phly\Swoole\TaskWorker\TaskWorker;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -20,7 +17,9 @@ use Swoole\Http\Server as HttpServer;
 
 class TaskWorkerTest extends TestCase
 {
-    public function setUp()
+    use ProphecyTrait;
+
+    public function setUp(): void
     {
         $this->container  = $this->prophesize(ContainerInterface::class);
         $this->server     = $this->createMock(HttpServer::class);
@@ -34,7 +33,7 @@ class TaskWorkerTest extends TestCase
             ->expects($this->once())
             ->method('finish');
 
-        $spy = (object) ['triggered' => false];
+        $spy  = (object) ['triggered' => false];
         $task = function () use ($spy) {
             $spy->triggered = true;
         };
@@ -45,7 +44,7 @@ class TaskWorkerTest extends TestCase
             ->error(
                 Argument::containingString('Invalid task provided to task worker'),
                 Argument::that(function ($context) {
-                    Assert::assertInternalType('array', $context);
+                    Assert::assertIsArray($context);
                     Assert::assertArrayHasKey('type', $context);
                     return $context;
                 })
@@ -62,7 +61,7 @@ class TaskWorkerTest extends TestCase
             ->expects($this->once())
             ->method('finish');
 
-        $spy = (object) ['triggered' => false];
+        $spy  = (object) ['triggered' => false];
         $task = $this->prophesize(TaskInterface::class);
         $task->
             __invoke($this->container->reveal())
@@ -83,7 +82,7 @@ class TaskWorkerTest extends TestCase
             ->notice(
                 Argument::containingString('Starting work on task'),
                 Argument::that(function ($context) {
-                    Assert::assertInternalType('array', $context);
+                    Assert::assertIsArray($context);
                     Assert::assertArrayHasKey('taskId', $context);
                     Assert::assertArrayHasKey('task', $context);
                     return $context;
@@ -124,7 +123,7 @@ class TaskWorkerTest extends TestCase
             ->notice(
                 Argument::containingString('Starting work on task'),
                 Argument::that(function ($context) {
-                    Assert::assertInternalType('array', $context);
+                    Assert::assertIsArray($context);
                     Assert::assertArrayHasKey('taskId', $context);
                     Assert::assertArrayHasKey('task', $context);
                     return $context;
@@ -135,10 +134,10 @@ class TaskWorkerTest extends TestCase
             ->error(
                 Argument::containingString('Error processing task'),
                 Argument::that(function ($context) use ($throwable) {
-                    Assert::assertInternalType('array', $context);
+                    Assert::assertIsArray($context);
                     Assert::assertArrayHasKey('taskId', $context);
                     Assert::assertArrayHasKey('error', $context);
-                    Assert::assertContains($throwable->getMessage(), $context['error']);
+                    Assert::assertStringContainsString($throwable->getMessage(), $context['error']);
                     return $context;
                 })
             )

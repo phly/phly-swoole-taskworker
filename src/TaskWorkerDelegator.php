@@ -1,8 +1,4 @@
 <?php
-/**
- * @license http://opensource.org/licenses/BSD-2-Clause BSD-2-Clause
- * @copyright Copyright (c) Matthew Weier O'Phinney
- */
 
 declare(strict_types=1);
 
@@ -14,7 +10,8 @@ use Swoole\Http\Server as HttpServer;
 
 class TaskWorkerDelegator
 {
-    public function __invoke(ContainerInterface $container, $serviceName, callable $callback) : HttpServer
+    /** @param mixed $serviceName */
+    public function __invoke(ContainerInterface $container, $serviceName, callable $callback): HttpServer
     {
         $server = $callback();
         $logger = $container->get(LoggerInterface::class);
