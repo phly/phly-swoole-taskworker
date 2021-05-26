@@ -1,13 +1,10 @@
 <?php
-/**
- * @license http://opensource.org/licenses/BSD-2-Clause BSD-2-Clause
- * @copyright Copyright (c) Matthew Weier O'Phinney
- */
 
 declare(strict_types=1);
 
 namespace Phly\Swoole\TaskWorker;
 
+use Closure;
 use Swoole\Http\Server as HttpServer;
 
 /**
@@ -21,23 +18,17 @@ use Swoole\Http\Server as HttpServer;
  */
 final class QueueableListener
 {
-    /**
-     * @var HttpServer
-     */
-    private $server;
+    private HttpServer $server;
 
-    /**
-     * @var callable
-     */
-    private $listener;
+    private Closure $listener;
 
-    public function __construct(HttpServer $server, callable $listener)
+    public function __construct(HttpServer $server, Closure $listener)
     {
         $this->server   = $server;
         $this->listener = $listener;
     }
 
-    public function __invoke(object $event) : void
+    public function __invoke(object $event): void
     {
         $this->server->task(new Task($this->listener, $event));
     }

@@ -1,14 +1,18 @@
 <?php
-/**
- * @license http://opensource.org/licenses/BSD-2-Clause BSD-2-Clause
- * @copyright Copyright (c) Matthew Weier O'Phinney
- */
 
 declare(strict_types=1);
 
 namespace Phly\Swoole\TaskWorker;
 
+use Closure;
 use Psr\Container\ContainerInterface;
+
+use function array_shift;
+use function get_class;
+use function is_array;
+use function is_object;
+use function is_string;
+use function sprintf;
 
 /**
  * Representation of a task to execute via task worker.
@@ -19,28 +23,23 @@ use Psr\Container\ContainerInterface;
  */
 final class Task implements TaskInterface
 {
-    /**
-     * @var callable
-     */
-    private $handler;
+    private Closure $handler;
 
-    /**
-     * @var array
-     */
-    private $payload;
+    private array $payload;
 
+    /** @param mixed ...$payload */
     public function __construct(callable $handler, ...$payload)
     {
         $this->handler = $handler;
         $this->payload = $payload;
     }
 
-    public function __invoke(ContainerInterface $container) : void
+    public function __invoke(ContainerInterface $container): void
     {
         ($this->handler)(...$this->payload);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'handler'   => $this->serializeHandler($this->handler),
@@ -48,7 +47,8 @@ final class Task implements TaskInterface
         ];
     }
 
-    private function serializeHandler($handler) : string
+    /** @param mixed $handler */
+    private function serializeHandler($handler): string
     {
         if (is_object($handler)) {
             return get_class($handler);
