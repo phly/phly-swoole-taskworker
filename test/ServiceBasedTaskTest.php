@@ -1,8 +1,4 @@
 <?php
-/**
- * @license http://opensource.org/licenses/BSD-2-Clause BSD-2-Clause
- * @copyright Copyright (c) Matthew Weier O'Phinney
- */
 
 declare(strict_types=1);
 
@@ -11,12 +7,15 @@ namespace PhlyTest\Swoole\TaskWorker;
 use Phly\Swoole\TaskWorker\DeferredServiceListener;
 use Phly\Swoole\TaskWorker\ServiceBasedTask;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as HttpServer;
 
 class ServiceBasedTaskTest extends TestCase
 {
-    public function setUp()
+    use ProphecyTrait;
+
+    public function setUp(): void
     {
         $this->container = $this->prophesize(ContainerInterface::class);
         $this->handler   = 'service-name';

@@ -1,13 +1,10 @@
 <?php
-/**
- * @license http://opensource.org/licenses/BSD-2-Clause BSD-2-Clause
- * @copyright Copyright (c) Matthew Weier O'Phinney
- */
 
 declare(strict_types=1);
 
 namespace Phly\Swoole\TaskWorker;
 
+use Closure;
 use Swoole\Http\Server as HttpServer;
 
 /**
@@ -19,20 +16,11 @@ use Swoole\Http\Server as HttpServer;
  */
 final class DeferredServiceListener
 {
-    /**
-     * @var HttpServer
-     */
-    private $server;
+    private HttpServer $server;
 
-    /**
-     * @var callable
-     */
-    private $listener;
+    private Closure $listener;
 
-    /**
-     * @var string
-     */
-    private $serviceName;
+    private string $serviceName;
 
     public function __construct(HttpServer $server, callable $listener, string $serviceName)
     {
@@ -41,7 +29,7 @@ final class DeferredServiceListener
         $this->serviceName = $serviceName;
     }
 
-    public function __invoke(object $event) : void
+    public function __invoke(object $event): void
     {
         $this->server->task(new ServiceBasedTask($this->serviceName, $event));
     }

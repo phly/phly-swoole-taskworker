@@ -1,8 +1,4 @@
 <?php
-/**
- * @license http://opensource.org/licenses/BSD-2-Clause BSD-2-Clause
- * @copyright Copyright (c) Matthew Weier O'Phinney
- */
 
 declare(strict_types=1);
 
@@ -13,10 +9,15 @@ use Psr\Log\LoggerInterface;
 use Swoole\Http\Server as HttpServer;
 use Throwable;
 
+use function get_class;
+use function gettype;
+use function is_object;
+use function json_encode;
+use function sprintf;
+
 class TaskWorker
 {
-    /** @var LoggerInterface */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(ContainerInterface $container, LoggerInterface $logger)
     {
@@ -24,11 +25,12 @@ class TaskWorker
         $this->logger    = $logger;
     }
 
-    public function __invoke(HttpServer $server, int $taskId, int $fromId, $task) : void
+    /** @param mixed $task */
+    public function __invoke(HttpServer $server, int $taskId, int $fromId, $task): void
     {
         if (! $task instanceof TaskInterface) {
             $this->logger->error('Invalid task provided to task worker: {type}', [
-                'type' => is_object($task) ? get_class($task) : gettype($task)
+                'type' => is_object($task) ? get_class($task) : gettype($task),
             ]);
             $server->finish('');
             return;
@@ -60,7 +62,7 @@ class TaskWorker
         ]);
     }
 
-    private function formatExceptionForLogging(Throwable $e) : string
+    private function formatExceptionForLogging(Throwable $e): string
     {
         return sprintf(
             "[%s - %d] %s\n%s",

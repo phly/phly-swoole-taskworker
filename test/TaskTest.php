@@ -1,8 +1,4 @@
 <?php
-/**
- * @license http://opensource.org/licenses/BSD-2-Clause BSD-2-Clause
- * @copyright Copyright (c) Matthew Weier O'Phinney
- */
 
 declare(strict_types=1);
 
@@ -11,11 +7,14 @@ namespace PhlyTest\Swoole\TaskWorker;
 use Closure;
 use Phly\Swoole\TaskWorker\Task;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 
 class TaskTest extends TestCase
 {
-    public function setUp()
+    use ProphecyTrait;
+
+    public function setUp(): void
     {
         $this->container = $this->prophesize(ContainerInterface::class)->reveal();
         $this->result    = (object) ['payload' => null];
@@ -55,7 +54,7 @@ class TaskTest extends TestCase
 
     public function testTaskCanSerializeStringHandlerName()
     {
-        $task = new Task('str_replace', 'foo', 'bar', 'foobar');
+        $task     = new Task('str_replace', 'foo', 'bar', 'foobar');
         $expected = [
             'handler'   => 'str_replace',
             'arguments' => [
@@ -70,7 +69,7 @@ class TaskTest extends TestCase
 
     public function testTaskCanSerializeStaticMethodNotation()
     {
-        $task = new Task(TestCase::class . '::fail');
+        $task     = new Task(TestCase::class . '::fail');
         $expected = [
             'handler'   => TestCase::class . '::fail',
             'arguments' => [],
@@ -81,9 +80,9 @@ class TaskTest extends TestCase
 
     public function testTaskCanSerializeInstanceMethod()
     {
-        $task = new Task([$this, 'setUp']);
+        $task     = new Task([$this, 'setUp']);
         $expected = [
-            'handler'   => __CLASS__ . '::setUp',
+            'handler'   => self::class . '::setUp',
             'arguments' => [],
         ];
 
@@ -92,9 +91,9 @@ class TaskTest extends TestCase
 
     public function testTaskCanSerializeStaticMethodViaArrayNotation()
     {
-        $task = new Task([__CLASS__, 'fail']);
+        $task     = new Task([self::class, 'fail']);
         $expected = [
-            'handler'   => __CLASS__ . '::fail',
+            'handler'   => self::class . '::fail',
             'arguments' => [],
         ];
 

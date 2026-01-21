@@ -1,28 +1,27 @@
 <?php
+
 /**
  * @see       https://github.com/phly/phly-swoole-taskworker for the canonical source repository
- * @copyright Copyright (c) 2019 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/phly/phly-swoole-taskworker/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
 namespace PhlyTest\Swoole\TaskWorker;
 
-use PHPUnit\Framework\TestCase;
 use Phly\Swoole\TaskWorker\ConfigProvider;
+use PHPUnit\Framework\TestCase;
 
 class ConfigProviderTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->provider = new ConfigProvider();
     }
 
-    public function testInvocationReturnsArray()
+    public function testInvocationReturnsArray(): array
     {
         $config = ($this->provider)();
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         return $config;
     }
 
@@ -32,6 +31,6 @@ class ConfigProviderTest extends TestCase
     public function testReturnedArrayContainsDependencies(array $config)
     {
         $this->assertArrayHasKey('dependencies', $config);
-        $this->assertInternalType('array', $config['dependencies']);
+        $this->assertIsArray($config['dependencies']);
     }
 }

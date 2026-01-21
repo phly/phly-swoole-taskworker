@@ -1,8 +1,4 @@
 <?php
-/**
- * @license http://opensource.org/licenses/BSD-2-Clause BSD-2-Clause
- * @copyright Copyright (c) Matthew Weier O'Phinney
- */
 
 declare(strict_types=1);
 
@@ -19,23 +15,18 @@ use Psr\Container\ContainerInterface;
  */
 final class ServiceBasedTask implements TaskInterface
 {
-    /**
-     * @var array
-     */
-    private $payload;
+    private array $payload;
 
-    /**
-     * @var string
-     */
-    private $serviceName;
+    private string $serviceName;
 
+    /** @param mixed ...$payload */
     public function __construct(string $serviceName, ...$payload)
     {
         $this->serviceName = $serviceName;
         $this->payload     = $payload;
     }
 
-    public function __invoke(ContainerInterface $container) : void
+    public function __invoke(ContainerInterface $container): void
     {
         $deferred = $container->get($this->serviceName);
         $listener = $deferred instanceof DeferredServiceListener
@@ -44,7 +35,7 @@ final class ServiceBasedTask implements TaskInterface
         $listener(...$this->payload);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'handler'   => $this->serviceName,

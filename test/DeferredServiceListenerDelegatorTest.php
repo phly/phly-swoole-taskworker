@@ -1,8 +1,7 @@
 <?php
+
 /**
  * @see       https://github.com/phly/phly-swoole-taskworker for the canonical source repository
- * @copyright Copyright (c) 2019 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/phly/phly-swoole-taskworker/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -12,13 +11,16 @@ namespace Phlytest\Swoole\TaskWorker;
 use Phly\Swoole\TaskWorker\DeferredServiceListener;
 use Phly\Swoole\TaskWorker\DeferredServiceListenerDelegator;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
-use Swoole\Http\Server as HttpServer;
 use stdClass;
+use Swoole\Http\Server as HttpServer;
 
 class DeferredServiceListenerDelegatorTest extends TestCase
 {
-    public function setUp()
+    use ProphecyTrait;
+
+    public function setUp(): void
     {
         $this->server    = $this->createMock(HttpServer::class);
         $this->container = $this->prophesize(ContainerInterface::class);
@@ -27,7 +29,7 @@ class DeferredServiceListenerDelegatorTest extends TestCase
     public function testReturnsOriginalServiceIfNotCallable()
     {
         $instance = new stdClass();
-        $factory = function () use ($instance) {
+        $factory  = function () use ($instance) {
             return $instance;
         };
 
@@ -45,7 +47,7 @@ class DeferredServiceListenerDelegatorTest extends TestCase
     {
         $listener = function ($event) {
         };
-        $factory = function () use ($listener) {
+        $factory  = function () use ($listener) {
             return $listener;
         };
         $this->container->get(HttpServer::class)->willReturn($this->server);
@@ -60,8 +62,6 @@ class DeferredServiceListenerDelegatorTest extends TestCase
 
         $this->assertNotSame($listener, $instance);
         $this->assertInstanceOf(DeferredServiceListener::class, $instance);
-        $this->assertAttributeSame($this->server, 'server', $instance);
-        $this->assertAttributeSame('listener', 'serviceName', $instance);
         $this->assertSame($listener, $instance->getListener());
     }
 }
